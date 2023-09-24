@@ -14,7 +14,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@styles': '/src/assets/scss/', // Remplace par le chemin réel de votre fichier style.scss
+      '@styles': '/src/styles', // Remplace par le chemin réel de votre fichier style.scss
     },
   },
 });
