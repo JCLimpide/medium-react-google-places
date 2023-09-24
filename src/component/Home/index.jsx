@@ -1,134 +1,163 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+import {
+  Typography,
+  Paper,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
+} from '@mui/material';
+
+import { green, blue, red, orange } from '@mui/material/colors';
 import './home.scss';
 
-import useGooglePlaceAutoComplete from '../../service/google_place_autocomplete';
+import AddressForm from './AddressForm';
+import PanelCalculation from './PanelCalculation';
+import Map from './Map';
+
+import { _MAP_CENTER_FR_ } from './config';
+
+const _COLORS_ = [green[500], blue[500], red[500], orange[500]];
 
 function Home() {
-  const address1Ref = useRef();
-  const googleAutoCompleteSvc = useGooglePlaceAutoComplete();
-  let autoComplete = '';
+  const [activeStep, setActiveStep] = useState(0);
 
-  const {
-    handleSubmit,
-    register,
-    setFocus,
-    setValue,
-    formState: { errors },
-  } = useForm({});
+  const addressForm = useForm({});
 
-  const handleAddressSelect = async () => {
-    let addressObj = await googleAutoCompleteSvc.getFullAddress(autoComplete);
-    address1Ref.current.value = addressObj.address1;
-    setValue('address1', addressObj.address1);
-    setValue(
-      'location',
-      `${addressObj.locality}, ${addressObj.adminArea1Long}`,
-    );
-    setValue('country', addressObj.countryLong);
-    setValue('postalCode', addressObj.postalCode);
-    setFocus('address2');
+  const [center, setCenter] = useState(_MAP_CENTER_FR_);
+
+  const [panelsState, setPanelsState] = useState({
+    pans: [{ nb: 1, color: _COLORS_[0], surface: 0 }],
+    activePan: 0,
+  });
+  const { pans = [], activePan = 0 } = panelsState;
+
+  const setActivePan = index => evt => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    setPanelsState(s => ({ ...s, activePan: index }));
   };
 
-  const onSubmit = () => {
-    console.log('Success!');
+  const addPan = evt => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    console.log('In addPan !');
+    setPanelsState(s => {
+      const newPans = {
+        pans: [
+          ...s.pans,
+          {
+            color: _COLORS_.find(c => !s.pans.some(p => p?.color === c)),
+            surface: 0,
+            nb: s.pans.length + 1,
+          },
+        ],
+        activePan: s.pans.length, // since new index is old size
+      };
+      console.log('>> newPans : ', newPans);
+      return newPans;
+    });
   };
 
-  useEffect(() => {
-    async function loadGoogleMaps() {
-      // initialize the Google Place Autocomplete widget and bind it to an input element.
-      // eslint-disable-next-line
-      autoComplete = await googleAutoCompleteSvc.initAutoComplete(
-        address1Ref.current,
-        handleAddressSelect,
-      );
-    }
-    loadGoogleMaps();
-  }, []);
+  const deletePan = index => evt => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    setPanelsState(s => ({
+      pans: [...s.pans].filter((item, i) => i !== index),
+      // if the deleted one is before the displayed, would get wrong order or > total
+      activePan:
+        s.activePan === index // if we delete the selected, back to start
+          ? 0
+          : index < s.activePan
+          ? activePan - 1
+          : activePan,
+    }));
+  };
+
+  const submitAddress = location => {
+    setCenter(location);
+    setActiveStep(1);
+  };
+
+  console.log('Rendering Home : ', { pans, activePan, center });
 
   return (
     <div className='container'>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <p>Enter Address:</p>
-        <div className='address-container'>
-          <div className='form-field-container'>
-            <label>Address 1 (Required)</label>
-            <input
-              id='address1'
-              type='text'
-              className='form-field'
-              placeholder='123 W Street Rd'
-              {...register('address1', { required: true })}
-              ref={address1Ref}
-            />
-            {errors.address1 && (
-              <span className='validation-error'>
-                Error: Street address is required.
-              </span>
-            )}
-          </div>
-          <div className='form-field-container'>
-            <label>Address 2</label>
-            <input
-              type='text'
-              className='form-field'
-              placeholder='Suite 123'
-              {...register('address2')}
-            />
-          </div>
-          <div className='form-field-container'>
-            <label>City, State/Province (Required)</label>
-            <input
-              type='text'
-              className='form-field'
-              placeholder='Anytown, Idaho'
-              {...register('location', { required: true })}
-            />
-            {errors.location && (
-              <span className='validation-error'>
-                Error: Location is required.
-              </span>
-            )}
-          </div>
-          <div className='form-field-container'>
-            <div className='short-form-field-container'>
-              <div>
-                <label>Country (Required)</label>
-                <input
-                  type='text'
-                  className='short-form-field'
-                  placeholder='United States'
-                  {...register('country', { required: true })}
-                />
-              </div>
-              <div>
-                <label>Postal Code (Required)</label>
-                <input
-                  type='text'
-                  className='short-form-field'
-                  placeholder='12345-6789'
-                  {...register('postalCode', { required: true })}
-                />
-              </div>
-            </div>
-            {errors.country && (
-              <span className='validation-error'>
-                Error: Country is required.
-              </span>
-            )}
-            {errors.postalCode && (
-              <span className='validation-error'>
-                Error: Postal code is required.
-              </span>
-            )}
-          </div>
-        </div>
-        <div className='button-container'>
-          <button type='submit' className='button-primary'>
-            Submit
-          </button>
-        </div>
-      </form>
+      <Typography variant='h5' color='primary' gutterBottom>
+        Calculer rendement solaire
+      </Typography>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'stretch',
+        }}
+      >
+        <Paper style={{ width: '100%', padding: '1rem' }}>
+          <Stepper activeStep={activeStep} orientation='vertical'>
+            <Step>
+              <StepLabel onClick={() => setActiveStep(0)}>
+                Renseigner l'adresse
+              </StepLabel>
+              <StepContent>
+                <AddressForm {...addressForm} centerMap={submitAddress} />
+              </StepContent>
+            </Step>
+            <Step>
+              <StepLabel onClick={() => setActiveStep(1)}>
+                Calculer les pans
+              </StepLabel>
+              <StepContent>
+                {pans.map((pan, index) => (
+                  <PanelCalculation
+                    key={index}
+                    pan={pan}
+                    addPan={addPan}
+                    isActive={activePan === index}
+                    setActivePan={setActivePan(index)}
+                    deletePan={deletePan(index)}
+                    nbPans={pans.length}
+                  />
+                ))}
+              </StepContent>
+            </Step>
+            <Step onClick={() => setActiveStep(2)}>
+              <StepLabel>Enlever les obstacles</StepLabel>
+              <StepContent>A DEFINIR</StepContent>
+            </Step>
+            <Step onClick={() => setActiveStep(3)}>
+              <StepLabel>Indiquer l'inclinaison</StepLabel>
+              <StepContent>A DEFINIR</StepContent>
+            </Step>
+            <Step onClick={() => setActiveStep(4)}>
+              <StepLabel>Retour météo</StepLabel>
+              <StepContent>A DEFINIR</StepContent>
+            </Step>
+            <Step onClick={() => setActiveStep(5)}>
+              <StepLabel>Résultat</StepLabel>
+              <StepContent>A DEFINIR</StepContent>
+            </Step>
+          </Stepper>
+        </Paper>
+        <Paper>
+          <Map
+            center={center}
+            setSurface={surface =>
+              setPanelsState({
+                ...panelsState,
+                pans: pans.map((pan, index) =>
+                  index === activePan ? { ...pan, surface } : pan,
+                ),
+              })
+            }
+            {...panelsState}
+            // activePan={activePan}
+            // pans={pans}
+          />
+        </Paper>
+      </div>
     </div>
   );
 }
