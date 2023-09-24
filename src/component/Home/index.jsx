@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 
 import { green, blue, red, orange } from '@mui/material/colors';
-import './home.scss';
 
 import AddressForm from './AddressForm';
 import PanelCalculation from './PanelCalculation';

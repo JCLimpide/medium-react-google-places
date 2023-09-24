@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import './home.scss';
-
+import { Button } from '@mui/material';
 import useGooglePlaceAutoComplete from '../../service/google_place_autocomplete';
 
 // all args besides centerMap are spread from react-hook-form's useForm
@@ -127,9 +126,9 @@ const AddressForm = ({
         </div>
       </div>
       <div className='button-container'>
-        <button type='submit' className='button-primary'>
+        <Button type='submit' variant='contained'>
           Submit
-        </button>
+        </Button>
       </div>
     </form>
   );
