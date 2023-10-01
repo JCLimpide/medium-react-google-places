@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import { useForm } from 'react-hook-form';
 
 import {
   Typography,
+  Grid,
+  Stack,
+  Button,
   Paper,
   Stepper,
   Step,
@@ -18,12 +22,13 @@ import Map from './Map';
 
 import { _MAP_CENTER_FR_ } from './config';
 
+import useStyles from '../../styles';
+import AddressFormDialog from './AddressFormDialog';
+
 const _COLORS_ = [green[500], blue[500], red[500], orange[500]];
 
 function Home() {
-  const [activeStep, setActiveStep] = useState(0);
-
-  const addressForm = useForm({});
+  const classes = useStyles();
 
   const [center, setCenter] = useState(_MAP_CENTER_FR_);
 
@@ -77,71 +82,32 @@ function Home() {
 
   const submitAddress = location => {
     setCenter(location);
-    setActiveStep(1);
   };
 
-  console.log('Rendering Home : ', { pans, activePan, center });
-
   return (
-    <div className='container'>
-      <Typography variant='h5' color='primary' gutterBottom>
-        Calculer rendement solaire
-      </Typography>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'stretch',
-        }}
-      >
-        <Paper style={{ width: '100%', padding: '1rem' }}>
-          <Stepper activeStep={activeStep} orientation='vertical'>
-            <Step>
-              <StepLabel onClick={() => setActiveStep(0)}>
-                Renseigner l'adresse
-              </StepLabel>
-              <StepContent>
-                <AddressForm {...addressForm} centerMap={submitAddress} />
-              </StepContent>
-            </Step>
-            <Step>
-              <StepLabel onClick={() => setActiveStep(1)}>
-                Calculer les pans
-              </StepLabel>
-              <StepContent>
-                {pans.map((pan, index) => (
-                  <PanelCalculation
-                    key={index}
-                    pan={pan}
-                    addPan={addPan}
-                    isActive={activePan === index}
-                    setActivePan={setActivePan(index)}
-                    deletePan={deletePan(index)}
-                    nbPans={pans.length}
-                  />
-                ))}
-              </StepContent>
-            </Step>
-            <Step onClick={() => setActiveStep(2)}>
-              <StepLabel>Enlever les obstacles</StepLabel>
-              <StepContent>A DEFINIR</StepContent>
-            </Step>
-            <Step onClick={() => setActiveStep(3)}>
-              <StepLabel>Indiquer l'inclinaison</StepLabel>
-              <StepContent>A DEFINIR</StepContent>
-            </Step>
-            <Step onClick={() => setActiveStep(4)}>
-              <StepLabel>Retour météo</StepLabel>
-              <StepContent>A DEFINIR</StepContent>
-            </Step>
-            <Step onClick={() => setActiveStep(5)}>
-              <StepLabel>Résultat</StepLabel>
-              <StepContent>A DEFINIR</StepContent>
-            </Step>
-          </Stepper>
-        </Paper>
-        <Paper>
+    <div className={classes.root}>
+      <Grid container className={classes.homepageContainer}>
+        <Grid item md={6} className={clsx(classes.column, classes.columnLeft)}>
+          <Stack
+            direction='row'
+            justifyContent='space-between'
+            alignItems='center'
+            spacing={2}
+          >
+            <Typography
+              variant='h5'
+              component='h1'
+              color='primary'
+              gutterBottom
+            >
+              Calculer rendement solaire
+            </Typography>
+            <AddressFormDialog submitAddress={submitAddress} />
+          </Stack>
+        </Grid>
+        <Grid item md={6}>
           <Map
+            classes={classes}
             center={center}
             setSurface={surface =>
               setPanelsState({
@@ -152,13 +118,26 @@ function Home() {
               })
             }
             {...panelsState}
-            // activePan={activePan}
-            // pans={pans}
+            activePan={activePan}
+            pans={pans}
           />
-        </Paper>
-      </div>
+        </Grid>
+      </Grid>
     </div>
   );
 }
 
 export default Home;
+
+// Content for PanelCalculation
+// {pans.map((pan, index) => (
+//   <PanelCalculation
+//     key={index}
+//     pan={pan}
+//     addPan={addPan}
+//     isActive={activePan === index}
+//     setActivePan={setActivePan(index)}
+//     deletePan={deletePan(index)}
+//     nbPans={pans.length}
+//   />
+// ))}
