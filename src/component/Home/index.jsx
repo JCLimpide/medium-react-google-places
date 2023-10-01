@@ -1,22 +1,10 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useForm } from 'react-hook-form';
 
-import {
-  Typography,
-  Grid,
-  Stack,
-  Button,
-  Paper,
-  Stepper,
-  Step,
-  StepLabel,
-  StepContent,
-} from '@mui/material';
+import { Typography, Grid, Stack, Paper } from '@mui/material';
 
 import { green, blue, red, orange } from '@mui/material/colors';
 
-import AddressForm from './AddressForm';
 import PanelCalculation from './PanelCalculation';
 import Map from './Map';
 
@@ -94,16 +82,22 @@ function Home() {
             alignItems='center'
             spacing={2}
           >
-            <Typography
-              variant='h5'
-              component='h1'
-              color='primary'
-              gutterBottom
-            >
+            <Typography variant='h5' component='h1'>
               Calculer rendement solaire
             </Typography>
             <AddressFormDialog submitAddress={submitAddress} />
           </Stack>
+          <div className={classes.profilesWrapper}>
+            <Grid container spacing={2}>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Grid item md={4} key={i}>
+                  <Paper elevation={'card'} className={classes.profileCard}>
+                    <p>Test</p>
+                  </Paper>
+                </Grid>
+              ))}
+            </Grid>
+          </div>
         </Grid>
         <Grid item md={6}>
           <Map

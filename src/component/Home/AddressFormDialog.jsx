@@ -5,11 +5,9 @@ import {
   Button,
   Dialog,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   Slide,
   Stack,
-  Chip,
   Typography,
 } from '@mui/material';
 
