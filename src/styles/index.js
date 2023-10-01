@@ -27,6 +27,12 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     height: '100%',
   },
+  profileCard: {
+    padding: '1.5rem',
+  },
+  profilesWrapper: {
+    marginTop: '3rem',
+  },
 }));
 
 export default useStyles;

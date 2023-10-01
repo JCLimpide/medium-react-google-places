@@ -15,7 +15,7 @@ const PanelCalculation = ({
 }) => (
   <Paper
     style={{ background: '#f2f2f2', padding: '1.5em', margin: '1em 0' }}
-    elevation={isActive ? 12 : 2}
+    elevation={isActive ? 12 : 4}
     onClick={setActivePan}
   >
     <Typography

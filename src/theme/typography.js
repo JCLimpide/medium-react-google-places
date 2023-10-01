@@ -33,7 +33,8 @@ const typography = {
   h5: {
     fontSize: 24,
     lineHeight: 1.5,
-    fontWeight: 700,
+    //fontWeight: 700,
+    fontWeight: 500,
     letterSpacing: 0,
   },
   h6: {
