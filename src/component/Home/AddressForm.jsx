@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Button } from '@mui/material';
+import { Button, FormControl, TextField, Stack } from '@mui/material';
 import useGooglePlaceAutoComplete from '../../service/google_place_autocomplete';
 
 // all args besides centerMap are spread from react-hook-form's useForm
@@ -51,85 +51,79 @@ const AddressForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <p>Renseigner l'adresse :</p>
-      <div className='address-container'>
-        <div className='form-field-container'>
-          <label>Address 1 (Required)</label>
-          <input
-            id='address1'
-            type='text'
-            className='form-field'
-            placeholder='123 Rue blabla'
-            {...register('address1', { required: true })}
+      <Stack spacing={2}>
+        <FormControl>
+          <TextField
             ref={address1Ref}
+            variant='filled'
+            label='Adresse 1 *'
+            {...register('address1', { required: true })}
+            {...(errors.address1
+              ? {
+                  error: true,
+                  helperText: 'Street address is required.',
+                }
+              : {})}
           />
-          {errors.address1 && (
-            <span className='validation-error'>
-              Error: Street address is required.
-            </span>
-          )}
-        </div>
-        <div className='form-field-container'>
-          <label>Address 2</label>
-          <input
-            type='text'
-            className='form-field'
-            placeholder='Suite 123'
+        </FormControl>
+
+        <FormControl>
+          <TextField
+            variant='filled'
+            label='Adresse 2'
             {...register('address2')}
           />
-        </div>
-        <div className='form-field-container'>
-          <label>City, State/Province (Required)</label>
-          <input
-            type='text'
-            className='form-field'
-            placeholder='Rennes, Bretagne'
-            {...register('locality', { required: true })}
-          />
-          {errors.locality && (
-            <span className='validation-error'>
-              Error: Locality is required.
-            </span>
-          )}
-        </div>
-        <div className='form-field-container'>
-          <div className='short-form-field-container'>
-            <div>
-              <label>Pays (Requis)</label>
-              <input
-                type='text'
-                className='short-form-field'
-                placeholder='France'
-                {...register('country', { required: true })}
-              />
-            </div>
-            <div>
-              <label>Code Postal (Requis)</label>
-              <input
-                type='text'
-                className='short-form-field'
-                placeholder='12345-6789'
-                {...register('postalCode', { required: true })}
-              />
-            </div>
-          </div>
-          {errors.country && (
-            <span className='validation-error'>
-              Error: Country is required.
-            </span>
-          )}
-          {errors.postalCode && (
-            <span className='validation-error'>
-              Error: Postal code is required.
-            </span>
-          )}
-        </div>
-      </div>
-      <div className='button-container'>
-        <Button type='submit' variant='contained'>
-          Submit
-        </Button>
-      </div>
+        </FormControl>
+
+        <Stack direction='row' spacing={2}>
+          <FormControl>
+            <TextField
+              variant='filled'
+              label='Ville/Province *'
+              {...register('locality', { required: true })}
+              {...(errors.locality
+                ? {
+                    error: true,
+                    helperText: 'Locality is required.',
+                  }
+                : {})}
+            />
+          </FormControl>
+
+          <FormControl>
+            <TextField
+              variant='filled'
+              label='Pays *'
+              {...register('country', { required: true })}
+              {...(errors.country
+                ? {
+                    error: true,
+                    helperText: 'Country is required.',
+                  }
+                : {})}
+            />
+          </FormControl>
+
+          <FormControl>
+            <TextField
+              variant='filled'
+              label='Code postal *'
+              {...register('postalCode', { required: true })}
+              {...(errors.postalCode
+                ? {
+                    error: true,
+                    helperText: 'Postal code is required.',
+                  }
+                : {})}
+            />
+          </FormControl>
+        </Stack>
+        <Stack direction='row' justifyContent='flex-end'>
+          <Button variant='contained' color='primary' type='submit'>
+            Rechercher
+          </Button>
+        </Stack>
+      </Stack>
     </form>
   );
 };
