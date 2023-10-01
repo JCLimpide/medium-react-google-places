@@ -1,10 +1,10 @@
 const palette = {
   primary: {
-    lighter: '#C8FACD',
-    light: '#5BE584',
-    main: '#00AB55',
-    dark: '#007B55',
-    darker: '#005249',
+    lighter: '#',
+    light: '#7473FB',
+    main: '#5251FA',
+    dark: '#3938AF',
+    darker: '#',
   },
   secondary: {
     lighter: '#EFD6FF',
@@ -52,6 +52,10 @@ const palette = {
     800: '#212B36',
     900: '#161C24',
   },
+  background: {
+    light: '#F6F5FF',
+  },
+  formLabel: '#6c737f',
 };
 
 export default palette;

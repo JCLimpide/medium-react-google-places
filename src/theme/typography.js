@@ -1,8 +1,9 @@
-const primaryFont = 'Public Sans, sans-serif';
+const primaryFont = 'Ubuntu, sans-serif';
+const secondaryFont = 'System-ui, sans-serif';
 
 const typography = {
   useNextVariants: true,
-  fontFamily: primaryFont,
+  fontFamily: secondaryFont,
   fontSize: 16,
 
   h1: {
@@ -24,13 +25,13 @@ const typography = {
     letterSpacing: 0,
   },
   h4: {
-    fontSize: 24,
+    fontSize: 30,
     lineHeight: 1.5,
     fontWeight: 700,
     letterSpacing: 0,
   },
   h5: {
-    fontSize: 30,
+    fontSize: 24,
     lineHeight: 1.5,
     fontWeight: 700,
     letterSpacing: 0,
@@ -81,11 +82,11 @@ const typography = {
   button: {
     fontSize: 14,
     lineHeight: 1.71429,
-    fontWeight: 700,
+    fontWeight: 500,
     letterSpacing: 0,
     textTransform: 'unset',
   },
 };
 
-export { primaryFont };
+export { primaryFont, secondaryFont };
 export default typography;

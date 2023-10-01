@@ -1,8 +1,31 @@
-import { makeStyles } from 'tss-react/mui';
+import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(theme => ({
+  '@global': {
+    '*': {
+      padding: 0,
+      margin: 0,
+      boxSizing: 'border-box',
+    },
+  },
+
+  root: {
+    height: '100vh',
+  },
   homepageContainer: {
-    backgroundColor: 'red',
+    height: '100%',
+  },
+  column: {
+    padding: '2rem',
+    height: '100%',
+  },
+  columnLeft: {
+    backgroundColor: theme.palette.grey[100],
+    backgroundColor: theme.palette.background.light,
+  },
+  map: {
+    width: '100%',
+    height: '100%',
   },
 }));
 
