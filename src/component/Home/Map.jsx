@@ -19,7 +19,9 @@ const _POLYGON_DATA_ = {
   // fillColor: "#FF0000",
 };
 
-const Map = ({ center, activePan = 0, pans = [], setSurface }) => {
+const Map = props => {
+  const { classes, center, activePan = 0, pans = [], setSurface } = props;
+
   const [map, setMap] = useState();
   const [markers, setMarkers] = useState([]);
 
@@ -229,7 +231,7 @@ const Map = ({ center, activePan = 0, pans = [], setSurface }) => {
     }
   };
 
-  return <div id='map' style={{ width: '40vw', height: '90vh' }} />;
+  return <div id='map' className={classes.map} />;
 };
 
 export default Map;
